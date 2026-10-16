@@ -1,0 +1,25 @@
+<div class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center p-6 space-y-6 select-none">
+    <div class="w-16 h-16 rounded-2xl bg-red-500/10 border-2 border-red-500 flex items-center justify-center text-red-400 text-3xl shadow-[0_0_30px_rgba(239,68,68,0.5)] animate-pulse">
+        ✕
+    </div>
+    <div class="text-center space-y-2 select-none">
+        <span class="text-xs uppercase tracking-widest text-red-500 font-semibold">Base Destroyed</span>
+        <h2 class="text-4xl font-extrabold text-white tracking-tight">MISSION FAILED</h2>
+    </div>
+
+    <div class="flex gap-4 select-none">
+        <button @onclick="OnRestart"
+                class="btn-cyber-neon cursor-pointer px-6 py-3 rounded-xl text-black font-black text-sm tracking-wide transition-all">
+            Try Again
+        </button>
+        <button @onclick="OnReturnToBriefing"
+                class="cursor-pointer px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold text-sm transition-all border border-gray-700">
+            Return to Briefing
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnRestart { get; set; }
+    [Parameter] public EventCallback OnReturnToBriefing { get; set; }
+}

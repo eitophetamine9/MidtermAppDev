@@ -1,0 +1,198 @@
+@page "/profile"
+@inject GameSessionState GameState
+@inject NavigationManager Navigation
+
+<PageTitle>OPERATOR PROFILE // CyberType Terminal OS</PageTitle>
+
+<div class="min-h-screen bg-gray-950 text-slate-100 flex flex-col justify-between p-6 md:p-12 relative overflow-hidden font-mono">
+    <!-- Cyber Background Ambiance -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f293718_1px,transparent_1px),linear-gradient(to_bottom,#1f293718_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none"></div>
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Header Navigation -->
+    <header class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-800 pb-6 gap-4">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center font-bold text-xl shadow-[0_0_20px_rgba(34,211,238,0.25)]">
+                👤
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-2xl font-black tracking-tight text-white uppercase">OPERATOR COMBAT DOSSIER</h1>
+                    <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800/60 font-semibold">SECURITY CLEARANCE LVL 4</span>
+                </div>
+                <p class="text-xs text-gray-400 tracking-wider">LIFETIME TELEMETRY & RUN RECORDS</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button @onclick='() => Navigation.NavigateTo("/")'
+                    class="px-4 py-2 rounded-xl bg-gray-900 hover:bg-gray-800 text-xs text-gray-300 border border-gray-800 hover:border-gray-700 transition-all flex items-center gap-2">
+                <span>◀</span> Briefing Room
+            </button>
+            <button @onclick="StartRunFromProfile"
+                    class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-black font-extrabold text-xs tracking-wider uppercase transition-all shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+                Deploy Run ▶
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content: Key Records Banner + History -->
+    <main class="relative z-10 py-8 space-y-8 flex-1">
+        <!-- Key Records Showcase Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Best Accuracy -->
+            <div class="rounded-2xl bg-gray-900/80 backdrop-blur-xl border border-gray-700/80 p-6 shadow-xl relative overflow-hidden group hover:border-emerald-500/60 transition-all duration-200">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Best Accuracy</span>
+                    <span class="text-2xl">🎯</span>
+                </div>
+                <div class="mt-4 flex items-baseline gap-2">
+                    <span class="text-4xl font-black text-emerald-400 font-mono tracking-tight">
+                        @(GameState.BestAccuracy > 0 ? $"{GameState.BestAccuracy}%" : "--")
+                    </span>
+                </div>
+                <div class="mt-2 text-[11px] text-gray-500">
+                    Lifetime precision benchmark
+                </div>
+            </div>
+
+            <!-- Best WPM Record -->
+            <div class="rounded-2xl bg-gray-900/80 backdrop-blur-xl border border-gray-700/80 p-6 shadow-xl relative overflow-hidden group hover:border-cyan-500/60 transition-all duration-200">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Peak Typing Speed</span>
+                    <span class="text-2xl">⚡</span>
+                </div>
+                <div class="mt-4 flex items-baseline gap-2">
+                    <span class="text-4xl font-black text-cyan-400 font-mono tracking-tight">
+                        @(GameState.BestWpm > 0 ? $"{GameState.BestWpm}" : "--")
+                    </span>
+                    <span class="text-xs text-cyan-500 font-bold uppercase">WPM</span>
+                </div>
+                <div class="mt-2 text-[11px] text-gray-500">
+                    Highest burst typing throughput
+                </div>
+            </div>
+
+            <!-- Longest Wave Run -->
+            <div class="rounded-2xl bg-gray-900/80 backdrop-blur-xl border border-gray-700/80 p-6 shadow-xl relative overflow-hidden group hover:border-purple-500/60 transition-all duration-200">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Longest Wave Run</span>
+                    <span class="text-2xl">🌊</span>
+                </div>
+                <div class="mt-4 flex items-baseline gap-2">
+                    <span class="text-4xl font-black text-purple-400 font-mono tracking-tight">
+                        @(GameState.LongestWaveRun > 0 ? $"WAVE {GameState.LongestWaveRun}" : "--")
+                    </span>
+                </div>
+                <div class="mt-2 text-[11px] text-gray-500">
+                    Furthest sector defense reached
+                </div>
+            </div>
+
+            <!-- All-Time High Score -->
+            <div class="rounded-2xl bg-gray-900/80 backdrop-blur-xl border border-gray-700/80 p-6 shadow-xl relative overflow-hidden group hover:border-amber-500/60 transition-all duration-200">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">High Score</span>
+                    <span class="text-2xl">🏆</span>
+                </div>
+                <div class="mt-4 flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-amber-300 font-mono tracking-tight">
+                        @(GameState.AllTimeHighScore > 0 ? GameState.AllTimeHighScore.ToString("N0") : "--")
+                    </span>
+                </div>
+                <div class="mt-2 text-[11px] text-gray-500">
+                    Peak bounty credits acquired
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Totals & Breakdown -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Lifetime Metrics -->
+            <div class="rounded-2xl bg-gray-900/70 border border-gray-800 p-6 space-y-4">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <span class="text-cyan-400">❖</span> Career Telemetry
+                </h3>
+                <div class="space-y-3 text-xs font-mono">
+                    <div class="flex justify-between p-3 rounded-xl bg-gray-950 border border-gray-800/80">
+                        <span class="text-gray-400">Runs Attempted</span>
+                        <span class="text-white font-bold">@GameState.TotalRunsAttempted</span>
+                    </div>
+                    <div class="flex justify-between p-3 rounded-xl bg-gray-950 border border-gray-800/80">
+                        <span class="text-gray-400">Total Words Purged</span>
+                        <span class="text-cyan-400 font-bold">@GameState.TotalWordsDestroyedAllTime</span>
+                    </div>
+                    <div class="flex justify-between p-3 rounded-xl bg-gray-950 border border-gray-800/80">
+                        <span class="text-gray-400">Preferred Difficulty</span>
+                        <span class="text-amber-400 font-bold uppercase">@GameState.SelectedDifficulty</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Past Run History Table -->
+            <div class="lg:col-span-2 rounded-2xl bg-gray-900/70 border border-gray-800 p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <span class="text-purple-400">❖</span> Recent Combat Logs
+                    </h3>
+                    <span class="text-xs text-gray-500 font-mono">Last @GameState.PastRuns.Count Entries</span>
+                </div>
+
+                @if (GameState.PastRuns.Count == 0)
+                {
+                    <div class="p-8 text-center text-xs text-gray-500 border border-dashed border-gray-800 rounded-xl space-y-2">
+                        <div>No combat logs recorded yet.</div>
+                        <p class="text-gray-400">Deploy your first run from the Briefing Room to begin populating operator telemetry.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="text-gray-500 uppercase border-b border-gray-800 text-[10px]">
+                                <tr>
+                                    <th class="py-2.5 px-3">Timestamp</th>
+                                    <th class="py-2.5 px-3">Difficulty</th>
+                                    <th class="py-2.5 px-3">Wave</th>
+                                    <th class="py-2.5 px-3">Score</th>
+                                    <th class="py-2.5 px-3">Accuracy</th>
+                                    <th class="py-2.5 px-3">WPM</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/60">
+                                @foreach (var run in GameState.PastRuns)
+                                {
+                                    <tr class="hover:bg-gray-800/40 text-gray-300">
+                                        <td class="py-2.5 px-3 text-gray-400">@run.Timestamp.ToString("HH:mm:ss")</td>
+                                        <td class="py-2.5 px-3 font-semibold @(run.Difficulty == GameDifficulty.Hard ? "text-rose-400" : run.Difficulty == GameDifficulty.Easy ? "text-emerald-400" : "text-amber-400")">
+                                            @run.Difficulty
+                                        </td>
+                                        <td class="py-2.5 px-3 font-bold text-cyan-400">Wave @run.WaveReached</td>
+                                        <td class="py-2.5 px-3 text-white font-bold">@run.FinalScore.ToString("N0")</td>
+                                        <td class="py-2.5 px-3 text-emerald-400">@run.Accuracy%</td>
+                                        <td class="py-2.5 px-3 text-cyan-300 font-bold">@run.Wpm WPM</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
+        <div>Operator Telemetry & Records Module // CyberType OS</div>
+        <div class="mt-2 sm:mt-0">Encrypted Profile Cache: Synchronized</div>
+    </footer>
+</div>
+
+@code {
+    private void StartRunFromProfile()
+    {
+        GameState.ResetRun();
+        Navigation.NavigateTo("/defense-grid");
+    }
+}
