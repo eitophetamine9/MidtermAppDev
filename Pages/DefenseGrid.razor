@@ -5,27 +5,30 @@
 
 <PageTitle>DEFENSE GRID // CyberType OS</PageTitle>
 
-<div class="relative overflow-hidden w-full h-screen bg-gray-950 font-mono select-none outline-none focus:outline-none cursor-default"
+<!-- Fullscreen container with seamless Kenney space_bg.png starry pattern -->
+<div class="relative overflow-hidden w-full h-screen font-mono select-none outline-none focus:outline-none cursor-default bg-gray-950"
+     style="background-image: url('images/sprites/space_bg.png'); background-repeat: repeat; background-size: 256px 256px;"
      tabindex="0"
      @ref="gridContainer"
      @onkeydown="HandleKeyDown"
      @onclick="FocusGrid">
 
-    <!-- Cyber Background Grid & Scanline Effect -->
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f293715_1px,transparent_1px),linear-gradient(to_bottom,#1f293715_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none select-none"></div>
+    <!-- Ambient Dark Grid & Vignette Overlay -->
+    <div class="absolute inset-0 bg-gray-950/60 pointer-events-none select-none"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f293710_1px,transparent_1px),linear-gradient(to_bottom,#1f293710_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none select-none"></div>
 
     <!-- Screen Flash / Damage Glitch Overlay -->
     @if (damageFlash)
     {
-        <div class="absolute inset-0 bg-red-600/20 z-40 pointer-events-none select-none animate-pulse"></div>
+        <div class="absolute inset-0 bg-red-600/25 z-40 pointer-events-none select-none animate-pulse"></div>
     }
     @if (typoFlash)
     {
-        <div class="absolute inset-0 bg-amber-500/10 z-40 pointer-events-none select-none animate-pulse"></div>
+        <div class="absolute inset-0 bg-amber-500/15 z-40 pointer-events-none select-none animate-pulse"></div>
     }
 
     <!-- TOP HUD: Wave, Difficulty, Lexicon, Timer, Score, Combo, Accuracy -->
-    <header class="absolute top-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md select-none">
+    <header class="absolute top-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between border-b border-gray-800/80 bg-gray-950/85 backdrop-blur-md select-none">
         <!-- Wave & Badges & Objective -->
         <div class="flex items-center gap-3">
             <div class="px-3.5 py-1.5 rounded-lg bg-cyan-950/70 border border-cyan-500/40 text-cyan-400 font-bold text-sm tracking-wider flex items-center gap-2 shadow-[0_0_12px_rgba(34,211,238,0.2)] select-none">
@@ -60,7 +63,7 @@
                     TARGET LOCKED // [@lockedEnemy.Category]
                 </div>
                 <div class="text-lg font-bold tracking-wider font-mono">
-                    <span class="text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]">@lockedEnemy.TypedPart</span><span class="text-amber-300 underline underline-offset-4 animate-pulse">@lockedEnemy.NextChar</span><span class="text-gray-500">@(lockedEnemy.UntypedPart.Length > 0 ? lockedEnemy.UntypedPart.Substring(1) : "")</span>
+                    <span class="text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]">@lockedEnemy.TypedPart</span><span class="text-amber-300 underline underline-offset-4 animate-pulse">@lockedEnemy.NextChar</span><span class="text-gray-400">@(lockedEnemy.UntypedPart.Length > 0 ? lockedEnemy.UntypedPart.Substring(1) : "")</span>
                 </div>
             }
             else
@@ -115,18 +118,29 @@
         </div>
     </header>
 
-    <!-- LASER TARGETING BEAM (Vector SVG line from player base to locked target) -->
+    <!-- LASER ATTACK VISUAL (SVG targeting line & laser_beam.png pulse) -->
     <svg class="absolute inset-0 w-full h-full pointer-events-none select-none z-10">
         @if (lockedEnemy != null && !lockedEnemy.IsDestroyed)
         {
-            <line x1="50%" y1="92%"
-                  x2="@($"{lockedEnemy.X}%")" y2="@($"{lockedEnemy.Y + 20}px")"
-                  stroke="#22d3ee" stroke-width="2" stroke-dasharray="6,4"
-                  class="opacity-75 animate-pulse" />
-            <circle cx="@($"{lockedEnemy.X}%")" cy="@($"{lockedEnemy.Y + 20}px")" r="16"
-                    fill="none" stroke="#22d3ee" stroke-width="1.5" class="opacity-80 animate-ping" />
+            <line x1="50%" y1="88%"
+                  x2="@($"{lockedEnemy.X}%")" y2="@($"{lockedEnemy.Y + 25}px")"
+                  stroke="#22d3ee" stroke-width="2.5" stroke-dasharray="8,4"
+                  class="opacity-80 animate-pulse" />
+            <circle cx="@($"{lockedEnemy.X}%")" cy="@($"{lockedEnemy.Y + 25}px")" r="18"
+                    fill="none" stroke="#22d3ee" stroke-width="2" class="opacity-90 animate-ping" />
         }
     </svg>
+
+    <!-- LASER BEAM SPRITE ATTACK BOLT -->
+    @if (lockedEnemy != null && !lockedEnemy.IsDestroyed)
+    {
+        <div class="absolute z-15 pointer-events-none select-none transition-all duration-75 flex items-center justify-center"
+             style="left: @(lockedEnemy.X)%; top: @(lockedEnemy.Y + 35)px; transform: translate(-50%, 0);">
+            <img src="images/sprites/laser_beam.png" 
+                 alt="Laser Beam" 
+                 class="w-3 h-10 object-contain drop-shadow-[0_0_15px_rgba(34,211,238,1)] animate-pulse" />
+        </div>
+    }
 
     <!-- FLOATING COMBAT TEXTS (+POINTS, TYPO, SHIELD) -->
     @foreach (var fct in floatingTexts)
@@ -137,7 +151,7 @@
         </div>
     }
 
-    <!-- ENEMIES RENDERING FIELD -->
+    <!-- ENEMIES RENDERING FIELD (Kenney 2D Sprite Craft + Word Badges) -->
     <div class="absolute inset-0 z-20 pointer-events-none select-none">
         @foreach (var enemy in activeEnemies)
         {
@@ -146,38 +160,52 @@
                 <div class="absolute transition-all duration-75 flex flex-col items-center select-none"
                      style="left: @(enemy.X)%; top: @(enemy.Y)px; transform: translate(-50%, 0);">
                     
-                    <!-- Word Bubble -->
-                    <div class="px-3.5 py-1.5 rounded-lg backdrop-blur-md transition-all duration-150 flex items-center gap-1 select-none
-                                @(enemy.IsLocked 
-                                    ? "bg-cyan-950/90 border-2 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.6)] scale-110 z-30" 
-                                    : "bg-gray-900/85 border border-gray-700/80 shadow-lg")">
+                    <!-- 2D Enemy Sprite (Kenney Space Shooter) -->
+                    <div class="relative flex items-center justify-center">
+                        <img src="@enemy.SpriteUrl" 
+                             alt="Enemy Spacecraft" 
+                             class="w-12 h-12 object-contain transition-transform duration-150 @(enemy.IsLocked ? "scale-125 filter drop-shadow-[0_0_20px_rgba(34,211,238,0.9)]" : "filter drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]")" />
                         
                         @if (enemy.IsLocked)
                         {
-                            <span class="text-cyan-400 font-extrabold text-xs animate-pulse mr-0.5">▶</span>
+                            <!-- Targeting Reticle Bracket -->
+                            <div class="absolute -inset-2 border-2 border-dashed border-cyan-400 rounded-full animate-spin" style="animation-duration: 4s;"></div>
+                        }
+                    </div>
+
+                    <!-- Word Bubble Layered Below Sprite with High-Contrast Text -->
+                    <div class="mt-1 px-3 py-1 rounded-md backdrop-blur-md transition-all duration-150 flex items-center gap-1 select-none
+                                @(enemy.IsLocked 
+                                    ? "bg-cyan-950/95 border-2 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.7)] scale-105 z-30" 
+                                    : "bg-gray-900/90 border border-gray-700/90 shadow-md")">
+                        
+                        @if (enemy.IsLocked)
+                        {
+                            <span class="text-cyan-400 font-black text-xs animate-pulse mr-0.5">▶</span>
                         }
 
-                        <!-- Word Text split into Typed and Untyped -->
-                        <span class="text-sm font-bold tracking-wider font-mono select-none">
-                            <span class="text-cyan-400 font-extrabold drop-shadow-[0_0_8px_rgba(34,211,238,0.9)]">@enemy.TypedPart</span>
+                        <!-- Word Text split into Typed and Untyped Substrings -->
+                        <span class="text-sm font-black tracking-wider font-mono select-none">
+                            <span class="text-cyan-400 font-black drop-shadow-[0_0_10px_rgba(34,211,238,1)]">@enemy.TypedPart</span>
                             @if (enemy.IsLocked && enemy.NextChar.Length > 0)
                             {
-                                <span class="text-amber-300 underline font-extrabold underline-offset-2 animate-pulse bg-cyan-900/40 px-0.5 rounded">@enemy.NextChar</span>
-                                <span class="text-gray-400 font-medium">@(enemy.UntypedPart.Length > 0 ? enemy.UntypedPart.Substring(1) : "")</span>
+                                <span class="text-amber-300 underline font-black underline-offset-2 animate-pulse bg-cyan-900/60 px-1 rounded">@enemy.NextChar</span>
+                                <span class="text-gray-300 font-bold">@(enemy.UntypedPart.Length > 0 ? enemy.UntypedPart.Substring(1) : "")</span>
                             }
                             else
                             {
-                                <span class="text-gray-400 font-medium">@enemy.UntypedPart</span>
+                                <span class="text-gray-300 font-bold">@enemy.UntypedPart</span>
                             }
                         </span>
 
                         @if (enemy.IsLocked)
                         {
-                            <span class="text-cyan-400 font-extrabold text-xs animate-pulse ml-0.5">◀</span>
+                            <span class="text-cyan-400 font-black text-xs animate-pulse ml-0.5">◀</span>
                         }
                     </div>
 
-                    <div class="mt-0.5 text-[9px] uppercase tracking-wider px-1.5 py-0.2 rounded bg-black/50 text-gray-500 border border-gray-800 select-none">
+                    <!-- Category tag -->
+                    <div class="mt-0.5 text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded bg-black/75 text-gray-400 border border-gray-800 select-none">
                         @enemy.Category
                     </div>
                 </div>
@@ -185,12 +213,25 @@
         }
     </div>
 
+    <!-- PLAYER STARFIGHTER CRAFT AT BASE (Bottom Center) -->
+    <div class="absolute bottom-20 left-1/2 -translate-x-1/2 z-25 pointer-events-none flex flex-col items-center select-none transition-all duration-150">
+        <div class="relative">
+            <!-- Player Ship 2D Sprite (Kenney Space Shooter) -->
+            <img src="images/sprites/player_ship.png" 
+                 alt="Player Starfighter" 
+                 class="w-16 h-16 object-contain filter drop-shadow-[0_0_20px_rgba(34,211,238,0.85)] animate-pulse" />
+            
+            <!-- Thruster Plasma Glow -->
+            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-4 bg-cyan-400/80 rounded-full blur-sm animate-ping"></div>
+        </div>
+    </div>
+
     <!-- DEFENSE BASE AT BOTTOM -->
     <div class="absolute bottom-0 left-0 right-0 z-30 px-6 py-4 border-t border-gray-800/80 bg-gray-950/90 backdrop-blur-lg flex flex-col md:flex-row items-center justify-between gap-4 select-none">
-        <!-- Base Health Gauge -->
+        <!-- Base Health Gauge with Player Ship Icon -->
         <div class="flex items-center gap-3 w-full md:w-80 select-none">
-            <div class="w-8 h-8 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-sm">
-                🛡️
+            <div class="w-10 h-10 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center p-1">
+                <img src="images/sprites/player_ship.png" alt="Player Ship Icon" class="w-8 h-8 object-contain drop-shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
             </div>
             <div class="flex-1 space-y-1">
                 <div class="flex justify-between text-xs font-semibold">
@@ -210,13 +251,13 @@
         <!-- Center: Status Diagnostics -->
         <div class="flex items-center gap-2 text-xs text-gray-400 font-mono select-none">
             <div class="w-3 h-3 rounded-full bg-cyan-500 animate-ping-slow"></div>
-            <span>DEFENSE CANNON ONLINE</span>
+            <span>STARFIGHTER CANNONS ONLINE</span>
             <span class="text-gray-600">|</span>
             <span>ACCURACY: <strong class="text-white">@GameState.AccuracyPercentage%</strong></span>
             <span class="text-gray-600">|</span>
             <span>WPM: <strong class="text-cyan-300">@GameState.CurrentWpm</strong></span>
             <span class="text-gray-600">|</span>
-            <span>ENEMIES: <strong class="text-cyan-400">@activeEnemies.Count(e => !e.IsDestroyed)</strong></span>
+            <span>HOSTILES: <strong class="text-cyan-400">@activeEnemies.Count(e => !e.IsDestroyed)</strong></span>
         </div>
 
         <!-- Quick Actions & Abort Run Button -->
@@ -231,7 +272,7 @@
         </div>
     </div>
 
-    <!-- MODAL OVERLAYS (Refactored into reusable child components) -->
+    <!-- MODAL OVERLAYS (Refactored child components) -->
     @if (isWaveComplete)
     {
         <WaveCompleteModal WaveNumber="@GameState.WaveNumber"
@@ -399,6 +440,17 @@
             _ => 0.65 + (random.NextDouble() * 0.35)
         };
 
+        string category = word.Length <= 4 ? "Short" : word.Length <= 8 ? "Medium" : "Complex";
+
+        // Assign Kenney sprite based on category / difficulty
+        string sprite = category switch
+        {
+            "Complex" => "images/sprites/enemy_ship_red.png",
+            "Medium" => "images/sprites/enemy_ship_blue.png",
+            "Short" => "images/sprites/enemy_ship_green.png",
+            _ => "images/sprites/enemy_ship.png"
+        };
+
         activeEnemies.Add(new EnemyWord
         {
             Word = word,
@@ -406,7 +458,8 @@
             X = xPos,
             Y = 60,
             Speed = baseSpeed,
-            Category = word.Length <= 4 ? "Short" : word.Length <= 8 ? "Medium" : "Complex",
+            Category = category,
+            SpriteUrl = sprite,
             IsLocked = false,
             IsDestroyed = false
         });

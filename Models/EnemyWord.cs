@@ -13,6 +13,7 @@ namespace MidtermAppDev.Models
         public bool IsLocked { get; set; } = false;
         public bool IsDestroyed { get; set; } = false;
         public string Category { get; set; } = "Keyword";
+        public string SpriteUrl { get; set; } = "images/sprites/enemy_ship.png";
 
         public string TypedPart => Word.Substring(0, Math.Min(TypedIndex, Word.Length));
         public string NextChar => TypedIndex < Word.Length ? Word[TypedIndex].ToString() : string.Empty;
