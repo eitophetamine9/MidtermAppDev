@@ -1,0 +1,13 @@
+{
+  "name": "midtermappdev",
+  "version": "1.0.0",
+  "description": "Blazor WebAssembly Typing Survival Game with Tailwind CSS",
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i ./Styles/app.css -o ./wwwroot/css/app.css --minify",
+    "watch:css": "npx @tailwindcss/cli -i ./Styles/app.css -o ./wwwroot/css/app.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

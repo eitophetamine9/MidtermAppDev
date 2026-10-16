@@ -1,0 +1,19 @@
+# .NET artifacts
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+.vs/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment & IDE
+.vscode/
+.idea/
+*.swp
+*.DS_Store

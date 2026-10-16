@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@source "../**/*.razor";
+@source "../**/*.html";
+@source "../**/*.cs";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: "JetBrains Mono", monospace, Consolas, "Courier New";
+}
+
+/* Prevent I-beam text caret and unwanted text selection across game UI */
+*, *::before, *::after {
+  caret-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+button, a, [role="button"], input[type="button"], input[type="submit"], .cursor-pointer {
+  cursor: pointer !important;
+}
+
+input, textarea, [contenteditable="true"] {
+  caret-color: auto;
+  user-select: auto;
+  -webkit-user-select: auto;
+  cursor: text !important;
+}
+
+/* High-contrast, vibrant cyber buttons */
+.btn-cyber-primary {
+  background: linear-gradient(135deg, #22d3ee 0%, #14b8a6 50%, #6366f1 100%) !important;
+  color: #030712 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.5);
+  border: 1px solid rgba(165, 243, 252, 0.8);
+  text-shadow: none !important;
+}
+
+.btn-cyber-primary:hover {
+  background: linear-gradient(135deg, #67e8f9 0%, #2dd4bf 50%, #818cf8 100%) !important;
+  box-shadow: 0 0 35px rgba(34, 211, 238, 0.8);
+  transform: scale(1.03);
+}
+
+.btn-cyber-neon {
+  background-color: #22d3ee !important;
+  color: #020617 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
+  border: 1px solid #a5f3fc;
+}
+
+.btn-cyber-neon:hover {
+  background-color: #67e8f9 !important;
+  box-shadow: 0 0 35px rgba(34, 211, 238, 0.85);
+  transform: scale(1.03);
+}
